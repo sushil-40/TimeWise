@@ -13,6 +13,7 @@ const handleOnSubmit = (e) => {
   const obj = {
     task,
     hr,
+    id: randomIdGenerator(),
   };
 
   taskList.push(obj);
@@ -47,4 +48,19 @@ const displayEntryList = () => {
   });
 
   entryElm.innerHTML = str;
+};
+
+// Creating unique ID
+
+const randomIdGenerator = (length = 6) => {
+  const str = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890";
+
+  let id = "";
+  for (let i = 0; i < 6; i++) {
+    const randomIndex = Math.floor(Math.random() * str.length); // 0 -to- 61
+    // Math.random()*str.length;  // 0 - to - 61.999
+
+    id += str[randomIndex];
+  }
+  return id;
 };
