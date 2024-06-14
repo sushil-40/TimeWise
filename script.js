@@ -25,7 +25,6 @@ const handleOnSubmit = (e) => {
 //Display items in tables
 
 const displayEntryList = () => {
-  console.log(taskList);
   //   console.log("First");
   let str = "";
 
@@ -37,7 +36,9 @@ const displayEntryList = () => {
                   <td>${item.task}</td>
                   <td>${item.hr}</td>
                   <td class="text-end">
-                    <button class="btn btn-danger">
+                    <button class="btn btn-danger" onclick="handleOnDelete('${
+                      item.id
+                    }')">
                       <i class="fa-solid fa-trash"></i>
                     </button>
                     <button class="btn btn-success">
@@ -63,4 +64,16 @@ const randomIdGenerator = (length = 6) => {
     id += str[randomIndex];
   }
   return id;
+};
+
+// Deleting items from table
+
+const handleOnDelete = (id) => {
+  if (window.confirm("Are you sure, you want to delete this?")) {
+    //   console.log(id);
+
+    taskList = taskList.filter((item) => item.id !== id);
+
+    displayEntryList();
+  }
 };
