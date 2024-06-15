@@ -1,12 +1,14 @@
 let taskList = [];
 
+const hoursPerWeek = 24 * 7;
+
 const handleOnSubmit = (e) => {
   //   const elm = document.getElementById("task");
 
   const newForm = new FormData(e);
 
   const task = newForm.get("task");
-  const hr = newForm.get("hr");
+  const hr = +newForm.get("hr"); //+ downcast it to the number type
 
   //   console.log(task, hr);
 
@@ -16,6 +18,14 @@ const handleOnSubmit = (e) => {
     id: randomIdGenerator(),
     type: "entry",
   };
+
+  //Check if there is enough hours left to add
+
+  const exisitngTtlHrs = taskTotal();
+
+  if (exisitngTtlHrs + hr > hoursPerWeek) {
+    return alert("Sorry Boss not enough time to fit this task from last week.");
+  }
 
   taskList.push(obj);
   //   console.log(taskList);
@@ -54,6 +64,7 @@ const displayEntryList = () => {
   });
 
   entryElm.innerHTML = str;
+  taskTotal();
 };
 
 // display bad list items
@@ -87,6 +98,10 @@ const displayBadList = () => {
   });
 
   badElm.innerHTML = str;
+  document.getElementById("savedHrsElm").innerText = badList.reduce(
+    (acc, item) => acc + item.hr,
+    0
+  );
 };
 
 // Creating unique ID
@@ -113,6 +128,7 @@ const handleOnDelete = (id) => {
     taskList = taskList.filter((item) => item.id !== id);
 
     displayEntryList();
+    displayBadList();
   }
 };
 
@@ -131,4 +147,16 @@ const switchTask = (id, type) => {
   });
   displayEntryList();
   displayBadList();
+};
+
+//calculate saved hours
+
+const taskTotal = () => {
+  const ttlHr = taskList.reduce((acc, item) => {
+    return acc + item.hr;
+  }, 0);
+
+  document.getElementById("ttlHrs").innerText = ttlHr;
+
+  return ttlHr;
 };
